@@ -1,0 +1,155 @@
+You are Replit AI acting as a senior Flutter engineer. Do ALL steps automatically. Do not ask me questions. Apply changes directly and commit with clear messages.
+
+PROJECT GOAL
+Build/convert the “Peregrine Complaints” app into a fully OFFLINE-FIRST Flutter app (no servers, no HTTP). The app must install normally and store ALL data locally on the device. Three role modes are supported: Client, Support Committee, Higher Coordination Committee. The workflow: Client submits complaint → Support Committee tries to resolve and marks “Resolved” OR escalates → Higher Coordination Committee resolves/finalizes.
+
+CODE BASE
+- If a repo is open, create a new branch `offline-app`.
+- Otherwise, create a fresh Flutter project named `peregrine_offline_complaints` with stable Flutter (Dart null-safety).
+
+DEPENDENCIES (add to pubspec.yaml, latest stable):
+- State & routing: `flutter_riverpod`, `go_router`
+- Local DB: `drift`, `drift_sqflite`, `path_provider`
+- JSON: `json_annotation`, `build_runner`, `json_serializable`
+- Dates/format: `intl`
+- PDF export/print: `pdf`, `printing`
+- (Optional) Encryption: use `sqflite_sqlcipher` if available; otherwise leave a secure abstraction for later.
+- File picking: `file_picker`, `image_picker`
+- Local storage prefs: `shared_preferences`
+
+PLATFORMS & PERMISSIONS
+- Mobile-first (Android). Ensure no network/HTTP packages and no internet calls. Remove any INTERNET permission from AndroidManifest if present.
+- Full RTL support and Arabic localization. Add `ar` to `flutter_localizations`.
+
+DATA MODEL (Drift)
+Create these tables (with generated DAO/Companions):
+1) `complaints`:
+   - id (uuid, pk), createdAt, updatedAt
+   - complainantFirstName, complainantMiddleName, complainantLastName
+   - address, whatsapp, telegram, email, phone, altPhone
+   - onBehalfOfType (self | organization | other)
+   - behalfFullName, behalfAddress, behalfWhatsapp, behalfTelegram, behalfPhone, behalfRelation
+   - categoryId (fk → categories.id)
+   - authorityId (fk → authorities.id, nullable)
+   - requestType (free text: what did the authority request to do)
+   - incidentDate, awarenessDate
+   - summary (multiline)
+   - authorityOfferProvided (bool)
+   - desiredResolution (text)
+   - previousComplaint (bool)
+   - legalActionExists (bool)
+   - status (enum: NEW, IN_REVIEW, RESOLVED_SUPPORT, ESCALATED, RESOLVED_COORD, CLOSED, REJECTED)
+   - assignedToUserId (fk → users.id, nullable)
+2) `categories`:
+   - id (uuid, pk), nameAr, groupAr (e.g., "المواصفات والمقاييس", "الجمارك", "الضرائب", "صندوق النظافة والتحسين")
+3) `authorities`:
+   - id (uuid, pk), nameAr
+4) `attachments`:
+   - id (uuid, pk), complaintId (fk), filePath, fileType, note
+5) `actions_log`:
+   - id (uuid, pk), complaintId (fk), actionType (CREATE, EDIT, ASSIGN, RESOLVE_SUPPORT, ESCALATE, RESOLVE_COORD, CLOSE, REJECT, ADD_NOTE), note, happenedAt
+6) `users` (local-only for role mode):
+   - id (uuid, pk), displayName, role (CLIENT | SUPPORT | COORD), pinCodeHash (nullable)
+
+SEED DATA
+- Seed `categories` from the provided Arabic taxonomy of recurring complaints (“تكرار الشكاوى”) with groups:
+  * "المواصفات والمقاييس" with items such as:
+    - سحب عينات متكررة لنفس المنتج
+    - عدم قبول الفحوصات السابقة
+    - مبالغة في الإجراءات الشكلية والمعاينة الظاهرية
+    - رفض شهادات المطابقة ونتائج الاختبار
+    - رفض تقارير اختبار العينات
+    - التحريز الشامل لجميع محتويات الشاحنة
+    - تأخير الإفراج / الفحص لمدة طويلة
+    - ارتفاع أجور الفحص
+    - الإجراءات على منتج سليم بسبب منتج مخالف
+    - التأخير في نتائج الفحص الظاهري
+    - تكرار الفحوصات لمنتجات سابقة
+    - غرامات غير قانونية
+    - ابتزاز
+    - إلزام المصنعين بمواصفات اختيارية
+  * "الجمارك" (أمثلة):
+    - إهمال البضائع عند المطابقة
+    - معاملة المواد الخام كمنتج نهائي للاستهلاك
+    - ازدواجية المطالبة بالضمان
+    - مخالفة اتفاق
+    - عدم البت في الإتلاف
+    - تفاوت أوقات المعاينة بين الجهات
+    - تأخر الإفراج لعدم الوزن
+    - الافتقار لنظام واضح لقيمة البضائع
+    - عدم حماية العلامة التجارية
+    - رفض إقرارات الشراء
+    - كسر الإعفاء المقدم
+    - مخالفة للتعميمات
+    - زيادة في القيمة الجمركية
+    - احتجاز بضائع خارجة من صنعاء
+    - استيفاء وثائق الهيئة العامة للاستثمار
+    - تأخير السلع (سريعة التلف)
+    - اختلال في تقييم السعر
+    - عدم إعادة الرسوم
+    - إعادة الجمركة
+    - احتجاز المرتجع
+    - فترة التخصيم
+    - آلية القيمة والثمن
+  * "الضرائب" (أمثلة): طلب إقرارات سابقة، تأخير استلام الإقرارات، الدفع نقدًا/شيكات، رفع ضريبة الأرباح، طلب أصل البيان الجمركي، استدعاء من مباحث الأموال العامة، مبالغ تحت الحساب، عدم اتخاذ الإجراءات القانونية، زيادة الإجراءات…
+  * "صندوق النظافة والتحسين" (أمثلة): التحصيل بين المديريات، رسوم الدعاية والإعلان وازدواجية التحصيل، ارتفاع الرسوم، تحصيل بدون سندات، أسلوب الإكراه، ضعف التنسيق مع الأمن، التنصل عن تنفيذ الاتفاقات، المزاجية في المعاملات، خلل إداري…
+- Keep seed lists in `assets/categories_ar.json` and load at first run if DB empty.
+
+FORMS & FIELDS (Client screen)
+Implement the full complaint form per the Arabic “استمارة تقديم الشكوى”. Create a multi-step form with validation:
+- Step 1: Complainant info (first/middle/last name, address, WhatsApp/Telegram/email/phone/alt phone)
+- Step 2: On behalf selection (self/organization/other) + related fields (name, address, WhatsApp, Telegram, phone, relation)
+- Step 3: Category + Authority + Request Type + incidentDate + awarenessDate
+- Step 4: Complaint details: summary (bulleted multiline), authority offered solution? (yes/no), desired resolution (text), previous complaint? (yes/no), legal case? (yes/no)
+- Step 5: Attachments (pick files/images). Auto-save draft on each step. All fields RTL-ready with Arabic labels.
+
+ROLE MODES & SCREENS
+- Role Switcher on welcome screen: Client / Support Committee / Higher Coordination Committee.
+- Protect Support & Coordination modes with a simple local PIN setup & check.
+- Client Home: “New Complaint”, “My Complaints” (filter by status), “Export/Import”.
+- Support Home: “Inbox (NEW/IN_REVIEW)”, “Assigned to me”, “Resolved by Support”, “Escalated”.
+  - Detail screen: actions (Assign to me, Add note, Resolve, Escalate, Attach file)
+- Coordination Home: “Escalated to Coordination”, actions (Resolve, Close, Reject) with reason.
+
+WORKFLOW IMPLEMENTATION
+- Status transitions:
+  - NEW → IN_REVIEW when Support opens/assigns.
+  - IN_REVIEW → RESOLVED_SUPPORT OR ESCALATED.
+  - ESCALATED → RESOLVED_COORD or CLOSED or REJECTED.
+- Every transition writes an entry to `actions_log`.
+- Duplicate checker: when saving a complaint, run a simple similarity check against existing records using (categoryId + authorityId + trigram search in summary). If score ≥ threshold, mark badge “Possible Duplicate” + quick link.
+
+REPORTING
+- “Daily Report” screen: date picker → show counts (new, in_review, resolved_support, escalated, resolved_coord, closed, rejected). Also top categories and authorities.
+- Export button: generate Arabic RTL **PDF** with the same sections. Use `pdf` & `printing`. Include table with totals and a bullet list of notable items. Save in app documents directory. Provide “Share” action.
+- Add JSON export/import: export selected complaints to a `.json` bundle (plus copy attachments to a folder). Import should merge by id with upsert.
+
+UX & ARABIZATION
+- Full RTL, Arabic labels, and fonts bundled locally (no external Google Fonts).
+- Consistent iconography and spacing. Snackbar feedback for all actions.
+- Dark/Light modes.
+
+QUALITY & TESTING
+- Unit tests for DAOs (insert/update/query).
+- Golden tests for main forms if feasible.
+- No network calls; remove any dead HTTP code. Lint & format.
+
+DELIVERABLES
+- Working Flutter project with above features.
+- Seeded Arabic categories and groups.
+- Sample data generator (dev-only).
+- Clear README (Arabic/English) describing roles, forms, workflow, export/import, and how to build APK locally.
+
+RUN & BUILD
+- `flutter pub get`
+- `flutter run`
+- For release (later): `flutter build apk`
+
+Make small, focused commits with messages like:
+- chore(db): add drift schema for complaints & categories
+- feat(form): multi-step complaint form (Arabic RTL)
+- feat(workflow): status transitions + actions log
+- feat(report): daily PDF export
+- feat(io): JSON export/import + attachments
+- ui: role switcher + protected modes
+- fix: remove internet permission and any network code

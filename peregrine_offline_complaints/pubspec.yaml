@@ -1,0 +1,33 @@
+name: peregrine_offline_complaints
+description: An offline-first web complaints management app with Arabic RTL support
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  # Core web dependencies
+  http: ^1.1.0
+  
+  # Local storage for web
+  shared_preferences: ^2.2.2
+  
+  # Date and utility libraries
+  intl: ^0.19.0
+  
+  # UUID generation
+  uuid: ^4.2.1
+  
+  # Crypto for PIN hashing
+  crypto: ^3.0.3
+
+dev_dependencies:
+  test: ^1.24.0
+  build_runner: ^2.4.7
+  webdev: ^3.0.9
+
+# Web configuration
+flutter:
+  uses-material-design: false
