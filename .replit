@@ -16,31 +16,15 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Flutter Web App"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Flutter Dev Server"
+args = "Flutter Web Server"
 
 [[workflows.workflow]]
-name = "Flutter Web App"
+name = "Flutter Web Server"
 author = "agent"
-
-[workflows.workflow.metadata]
-outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd peregrine_offline_complaints && python3 -m http.server 5000 --bind 0.0.0.0 --directory build/web"
-waitForPort = 5000
-
-[[workflows.workflow]]
-name = "Flutter Dev Server"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd peregrine_offline_complaints && flutter run --web-port=5000 --web-hostname=0.0.0.0 --web-renderer=html"
 waitForPort = 5000
 
 [workflows.workflow.metadata]
