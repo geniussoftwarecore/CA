@@ -1,0 +1,65 @@
+You are Replit AI. Resume and COMPLETE the offline-first Flutter app build WITHOUT asking me further questions.
+
+REPO & PROJECT
+- Use the existing repository "CA".
+- Set working dir to ./peregrine_offline_complaints
+- If no Flutter project detected here, scaffold a fresh one and move forward. Otherwise, keep and COMPLETE the current one.
+
+RESUME STRATEGY (idempotent checks)
+1) pubspec.yaml:
+   - ENSURE latest stable (no beta) Dart/Flutter constraints.
+   - MUST include: flutter_riverpod, go_router, drift, drift_sqflite, path_provider,
+     json_annotation, json_serializable, build_runner, intl, pdf, printing,
+     shared_preferences, file_picker, image_picker.
+   - Remove any http/retrofit packages. No network at all.
+   - Run `flutter pub get`.
+
+2) Android/iOS configs:
+   - Remove INTERNET permission from AndroidManifest if present.
+   - Add Arabic localization (flutter_localizations) and RTL support.
+   - Bundle local fonts (assets/fonts/Cairo/*, assets/fonts/Roboto/*). DO NOT use GoogleFonts.
+
+3) Assets & Branding:
+   - Expect assets/logo.png. If missing, create a placeholder and wire it in Splash/AppBar/Drawer.
+   - Define theme with:
+     Primary #002855, Secondary #009639, Accent #F4B400, Background #F9FAFB.
+   - Default Arabic RTL; light+dark themes.
+
+4) Drift database (create or verify) with DAOs:
+   Tables: complaints, categories, authorities, attachments, actions_log, users.
+   - Include status enum (NEW, IN_REVIEW, RESOLVED_SUPPORT, ESCALATED, RESOLVED_COORD, CLOSED, REJECTED).
+   - Actions log includes actionType + note + happenedAt.
+   - Generate code/build_runner. If schema exists, apply migrations safely for missing cols.
+
+5) Seed data:
+   - Create assets/categories_ar.json (group + nameAr structure).
+   - On first run, if categories table empty → load seed from JSON.
+   - (If file exists, keep it; do NOT duplicate.)
+
+6) UI & Flow:
+   - Role selector (Client / Support / Coordination) with local PIN for non-client modes.
+   - Multi-step complaint form (Arabic labels + validation + auto-save draft):
+     Step1 complainant info; Step2 on-behalf fields; Step3 category/authority/dates;
+     Step4 details (summary, authorityOfferProvided, desiredResolution, previousComplaint, legalActionExists);
+     Step5 attachments (pick/save locally).
+   - Home screens per role:
+     * Client: New Complaint, My Complaints, Export/Import
+     * Support: Inbox (NEW/IN_REVIEW), Assigned to me, Resolved by Support, Escalated
+     * Coordination: Escalated list + actions (Resolve, Close, Reject)
+   - Status transitions write to actions_log.
+
+7) Reports & IO:
+   - Daily Report screen with counts by status + top categories/authorities.
+   - Export Arabic RTL PDF via `pdf`/`printing` (save to app docs dir + Share).
+   - JSON export/import: export selected complaints to one bundle (plus copy attachments folder).
+   - Duplicate detection: simple similarity check (categoryId + authorityId + trigram on summary); flag “Possible Duplicate”.
+
+8) QA:
+   - Add at least minimal unit tests for DAOs and one widget test for form.
+   - Lint & format. Ensure `flutter run` works with no prompts.
+
+EXECUTION RULES
+- DO NOT ask me anything. Autonomously detect what exists and complete what’s missing.
+- Work in a new branch `resume-offline-build`. Make small commits with clear messages:
+  chore(pubspec), feat(db), feat(forms), feat(workflow), feat(report), feat(io), ui(theme/branding), fix(rtl/fonts), test(dao).
+- At the end, print a short RUN GUIDE with the exact commands to run the app.

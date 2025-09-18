@@ -1,533 +1,38 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام شكاوى بيرقرين - Peregrine Complaints</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1976d2">
-    <!-- Local Arabic fonts will be loaded via CSS -->
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="peregrine_offline_complaints">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>peregrine_offline_complaints</title>
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
-    <div id="app">
-        <!-- Loading Screen -->
-        <div id="loading" class="screen active">
-            <div class="loading-container">
-                <div class="spinner"></div>
-                <h2>جاري التحميل...</h2>
-                <p>نظام شكاوى بيرقرين</p>
-            </div>
-        </div>
-
-        <!-- Role Selection Screen -->
-        <div id="roleSelection" class="screen">
-            <div class="container">
-                <header class="header">
-                    <h1>نظام شكاوى بيرقرين</h1>
-                    <p>نظام إدارة الشكاوى المحلي</p>
-                </header>
-
-                <div class="role-cards">
-                    <div class="role-card" onclick="selectRole('client')">
-                        <div class="role-icon">👤</div>
-                        <h3>عميل</h3>
-                        <p>تقديم شكوى جديدة أو متابعة الشكاوى المقدمة</p>
-                    </div>
-
-                    <div class="role-card" onclick="selectRole('support')">
-                        <div class="role-icon">🛠️</div>
-                        <h3>لجنة الدعم</h3>
-                        <p>مراجعة ومعالجة الشكاوى الواردة</p>
-                        <div class="pin-required">🔒 يتطلب رمز PIN</div>
-                    </div>
-
-                    <div class="role-card" onclick="selectRole('coordination')">
-                        <div class="role-icon">⚖️</div>
-                        <h3>لجنة التنسيق العليا</h3>
-                        <p>المراجعة النهائية والقرارات الإدارية</p>
-                        <div class="pin-required">🔒 يتطلب رمز PIN</div>
-                    </div>
-                </div>
-
-                <div class="settings-panel">
-                    <button class="settings-btn" onclick="showSettings()">⚙️ الإعدادات</button>
-                    <button class="theme-btn" onclick="toggleTheme()">🌙 الوضع المظلم</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- PIN Entry Screen -->
-        <div id="pinEntry" class="screen">
-            <div class="container">
-                <div class="pin-form">
-                    <h2 id="pinTitle">إدخال رمز PIN</h2>
-                    <div class="pin-input-container">
-                        <input type="password" id="pinInput" placeholder="أدخل رمز PIN" maxlength="6">
-                        <button onclick="window.app.verifyPin()">تسجيل الدخول</button>
-                    </div>
-                    <div id="pinError" class="error-message"></div>
-                    <button class="back-btn" onclick="goBack()">← العودة</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Client Home Screen -->
-        <div id="clientHome" class="screen">
-            <div class="container">
-                <header class="screen-header">
-                    <h2>لوحة العميل</h2>
-                    <div class="header-actions">
-                        <button onclick="logout()">تسجيل الخروج</button>
-                    </div>
-                </header>
-
-                <div class="dashboard-cards">
-                    <div class="dashboard-card primary" onclick="showComplaintForm()">
-                        <div class="card-icon">➕</div>
-                        <h3>شكوى جديدة</h3>
-                        <p>تقديم شكوى جديدة</p>
-                    </div>
-
-                    <div class="dashboard-card" onclick="showMyComplaints()">
-                        <div class="card-icon">📋</div>
-                        <h3>شكاويي</h3>
-                        <p>عرض جميع الشكاوى المقدمة</p>
-                        <div class="badge" id="clientComplaintsCount">0</div>
-                    </div>
-
-                    <div class="dashboard-card" onclick="showExportImport()">
-                        <div class="card-icon">📊</div>
-                        <h3>تصدير/استيراد</h3>
-                        <p>إدارة البيانات</p>
-                    </div>
-                </div>
-
-                <div class="recent-complaints">
-                    <h3>آخر الشكاوى</h3>
-                    <div id="recentComplaintsList" class="complaints-list"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Support Home Screen -->
-        <div id="supportHome" class="screen">
-            <div class="container">
-                <header class="screen-header">
-                    <h2>لوحة لجنة الدعم</h2>
-                    <div class="header-actions">
-                        <button onclick="logout()">تسجيل الخروج</button>
-                    </div>
-                </header>
-
-                <div class="dashboard-cards">
-                    <div class="dashboard-card urgent" onclick="showInboxComplaints()">
-                        <div class="card-icon">📥</div>
-                        <h3>صندوق الوارد</h3>
-                        <p>شكاوى جديدة وقيد المراجعة</p>
-                        <div class="badge urgent" id="inboxCount">0</div>
-                    </div>
-
-                    <div class="dashboard-card" onclick="showAssignedComplaints()">
-                        <div class="card-icon">👤</div>
-                        <h3>المكلف بها</h3>
-                        <p>الشكاوى المكلف بمراجعتها</p>
-                        <div class="badge" id="assignedCount">0</div>
-                    </div>
-
-                    <div class="dashboard-card success" onclick="showResolvedComplaints()">
-                        <div class="card-icon">✅</div>
-                        <h3>المحلولة</h3>
-                        <p>الشكاوى المحلولة بواسطة الدعم</p>
-                        <div class="badge success" id="resolvedSupportCount">0</div>
-                    </div>
-
-                    <div class="dashboard-card warning" onclick="showEscalatedComplaints()">
-                        <div class="card-icon">⚠️</div>
-                        <h3>المحولة</h3>
-                        <p>الشكاوى المحولة للتنسيق العليا</p>
-                        <div class="badge warning" id="escalatedCount">0</div>
-                    </div>
-                </div>
-
-                <div class="daily-report">
-                    <h3>تقرير اليوم</h3>
-                    <div class="report-stats">
-                        <div class="stat-item">
-                            <span class="stat-value" id="todayNewCount">0</span>
-                            <span class="stat-label">جديدة</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value" id="todayResolvedCount">0</span>
-                            <span class="stat-label">محلولة</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value" id="todayEscalatedCount">0</span>
-                            <span class="stat-label">محولة</span>
-                        </div>
-                    </div>
-                    <button onclick="exportDailyReport()">📄 تصدير التقرير</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Coordination Home Screen -->
-        <div id="coordinationHome" class="screen">
-            <div class="container">
-                <header class="screen-header">
-                    <h2>لوحة لجنة التنسيق العليا</h2>
-                    <div class="header-actions">
-                        <button onclick="logout()">تسجيل الخروج</button>
-                    </div>
-                </header>
-
-                <div class="dashboard-cards">
-                    <div class="dashboard-card urgent" onclick="showEscalatedToCoordination()">
-                        <div class="card-icon">📨</div>
-                        <h3>المحولة للتنسيق</h3>
-                        <p>الشكاوى المحولة من لجنة الدعم</p>
-                        <div class="badge urgent" id="coordinationInboxCount">0</div>
-                    </div>
-
-                    <div class="dashboard-card success" onclick="showFinalizedComplaints()">
-                        <div class="card-icon">✅</div>
-                        <h3>المنجزة نهائياً</h3>
-                        <p>الشكاوى المحلولة والمغلقة</p>
-                        <div class="badge success" id="finalizedCount">0</div>
-                    </div>
-
-                    <div class="dashboard-card danger" onclick="showRejectedComplaints()">
-                        <div class="card-icon">❌</div>
-                        <h3>المرفوضة</h3>
-                        <p>الشكاوى المرفوضة</p>
-                        <div class="badge danger" id="rejectedCount">0</div>
-                    </div>
-                </div>
-
-                <div class="summary-report">
-                    <h3>الملخص الشامل</h3>
-                    <div class="summary-grid">
-                        <div class="summary-card">
-                            <h4>إجمالي الشكاوى</h4>
-                            <span class="summary-value" id="totalComplaints">0</span>
-                        </div>
-                        <div class="summary-card">
-                            <h4>معدل الحل</h4>
-                            <span class="summary-value" id="resolutionRate">0%</span>
-                        </div>
-                        <div class="summary-card">
-                            <h4>متوسط وقت الحل</h4>
-                            <span class="summary-value" id="avgResolutionTime">-- يوم</span>
-                        </div>
-                    </div>
-                    <button onclick="exportComprehensiveReport()">📊 تصدير التقرير الشامل</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Complaint Form Screen -->
-        <div id="complaintForm" class="screen">
-            <div class="container">
-                <header class="screen-header">
-                    <h2>تقديم شكوى جديدة</h2>
-                    <div class="header-actions">
-                        <button onclick="saveComplaintDraft()">💾 حفظ مسودة</button>
-                        <button onclick="goBack()">← العودة</button>
-                    </div>
-                </header>
-
-                <div class="form-container">
-                    <form id="complaintFormData" class="complaint-form">
-                        <div class="form-step active" id="step1">
-                            <h3>الخطوة 1: بيانات مقدم الشكوى</h3>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="firstName">الاسم الأول *</label>
-                                    <input type="text" id="firstName" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="middleName">الاسم الأوسط</label>
-                                    <input type="text" id="middleName">
-                                </div>
-                                <div class="form-group">
-                                    <label for="lastName">الاسم الأخير *</label>
-                                    <input type="text" id="lastName" required>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="address">العنوان *</label>
-                                <textarea id="address" required></textarea>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="phone">رقم الهاتف *</label>
-                                    <input type="tel" id="phone" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="altPhone">رقم هاتف بديل</label>
-                                    <input type="tel" id="altPhone">
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="whatsapp">واتساب</label>
-                                    <input type="tel" id="whatsapp">
-                                </div>
-                                <div class="form-group">
-                                    <label for="telegram">تليجرام</label>
-                                    <input type="text" id="telegram">
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">البريد الإلكتروني</label>
-                                    <input type="email" id="email">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-step" id="step2">
-                            <h3>الخطوة 2: تقديم الشكوى</h3>
-                            
-                            <div class="form-group">
-                                <label for="onBehalfOf">تقديم الشكوى:</label>
-                                <select id="onBehalfOf" onchange="toggleBehalfFields()">
-                                    <option value="self">باسمي الشخصي</option>
-                                    <option value="organization">باسم منظمة/شركة</option>
-                                    <option value="other">باسم شخص آخر</option>
-                                </select>
-                            </div>
-
-                            <div id="behalfFields" class="behalf-fields" style="display: none;">
-                                <div class="form-group">
-                                    <label for="behalfName">الاسم الكامل للجهة/الشخص</label>
-                                    <input type="text" id="behalfName">
-                                </div>
-                                <div class="form-group">
-                                    <label for="behalfAddress">العنوان</label>
-                                    <input type="text" id="behalfAddress">
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="behalfPhone">رقم الهاتف</label>
-                                        <input type="tel" id="behalfPhone">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="behalfWhatsapp">واتساب</label>
-                                        <input type="tel" id="behalfWhatsapp">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="behalfTelegram">تليجرام</label>
-                                        <input type="text" id="behalfTelegram">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="relation">صلة القرابة/العلاقة</label>
-                                    <input type="text" id="relation">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-step" id="step3">
-                            <h3>الخطوة 3: تفاصيل الشكوى</h3>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="category">فئة الشكوى *</label>
-                                    <select id="category" required onchange="loadAuthorities()">
-                                        <option value="">اختر فئة الشكوى</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="authority">الجهة المختصة</label>
-                                    <select id="authority">
-                                        <option value="">اختر الجهة</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="requestType">نوع الطلب من الجهة</label>
-                                <input type="text" id="requestType" placeholder="ما طلبته الجهة منك">
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="incidentDate">تاريخ الحادثة</label>
-                                    <input type="date" id="incidentDate">
-                                </div>
-                                <div class="form-group">
-                                    <label for="awarenessDate">تاريخ العلم بالمشكلة</label>
-                                    <input type="date" id="awarenessDate">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-step" id="step4">
-                            <h3>الخطوة 4: ملخص الشكوى والمطالب</h3>
-                            
-                            <div class="form-group">
-                                <label for="summary">ملخص الشكوى (مفصل) *</label>
-                                <textarea id="summary" required rows="6" placeholder="اشرح المشكلة بالتفصيل..."></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="authorityOffer">هل قدمت الجهة حلول؟</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="authorityOffer" value="yes"> نعم</label>
-                                    <label><input type="radio" name="authorityOffer" value="no" checked> لا</label>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="desiredResolution">الحل المطلوب</label>
-                                <textarea id="desiredResolution" rows="3" placeholder="ما الحل الذي تريده؟"></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="previousComplaint">هل سبق تقديم شكوى مماثلة؟</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="previousComplaint" value="yes"> نعم</label>
-                                    <label><input type="radio" name="previousComplaint" value="no" checked> لا</label>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="legalAction">هل توجد قضية قانونية؟</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="legalAction" value="yes"> نعم</label>
-                                    <label><input type="radio" name="legalAction" value="no" checked> لا</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-step" id="step5">
-                            <h3>الخطوة 5: المرفقات (اختياري)</h3>
-                            
-                            <div class="form-group">
-                                <label for="attachments">المرفقات</label>
-                                <input type="file" id="attachments" multiple accept="image/*,.pdf,.doc,.docx">
-                                <div class="file-help">يمكن إرفاق الصور والمستندات (PDF, DOC, DOCX)</div>
-                            </div>
-
-                            <div id="attachmentsList" class="attachments-list"></div>
-
-                            <div class="form-group">
-                                <label for="attachmentNotes">ملاحظات على المرفقات</label>
-                                <textarea id="attachmentNotes" rows="3" placeholder="أي ملاحظات على المرفقات المضافة"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="form-navigation">
-                            <button type="button" id="prevStep" onclick="previousStep()" style="display: none;">السابق</button>
-                            <button type="button" id="nextStep" onclick="nextStep()">التالي</button>
-                            <button type="submit" id="submitComplaint" style="display: none;">تقديم الشكوى</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Settings/Admin Screen -->
-        <div id="settings" class="screen">
-            <div class="container">
-                <header class="screen-header">
-                    <h2>الإعدادات</h2>
-                    <button onclick="goBack()">← العودة</button>
-                </header>
-                
-                <div class="settings-sections">
-                    <div class="settings-section">
-                        <h3>إعدادات النظام</h3>
-                        <div class="setting-item">
-                            <label>الوضع المظلم</label>
-                            <button onclick="toggleTheme()">تبديل</button>
-                        </div>
-                        <div class="setting-item">
-                            <label>مسح جميع البيانات</label>
-                            <button onclick="clearAllData()" class="danger">مسح</button>
-                        </div>
-                    </div>
-                    
-                    <div class="settings-section">
-                        <h3>إعدادات الأمان</h3>
-                        <div class="setting-item">
-                            <label>تغيير PIN لجنة الدعم</label>
-                            <button onclick="changePIN('support')">تغيير</button>
-                        </div>
-                        <div class="setting-item">
-                            <label>تغيير PIN لجنة التنسيق</label>
-                            <button onclick="changePIN('coordination')">تغيير</button>
-                        </div>
-                    </div>
-                    
-                    <div class="settings-section">
-                        <h3>النسخ الاحتياطي</h3>
-                        <div class="setting-item">
-                            <label>تصدير جميع البيانات</label>
-                            <button onclick="exportAllData()">تصدير JSON</button>
-                        </div>
-                        <div class="setting-item">
-                            <label>استيراد البيانات</label>
-                            <input type="file" id="importFile" accept=".json" onchange="importData()" style="display: none;">
-                            <button onclick="document.getElementById('importFile').click()">استيراد JSON</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Complaints List Screen -->
-        <div id="complaintsList" class="screen">
-            <div class="container">
-                <header class="screen-header">
-                    <h2 id="complaintsListTitle">الشكاوى</h2>
-                    <div class="header-actions">
-                        <input type="search" id="complaintsSearch" placeholder="بحث في الشكاوى...">
-                        <select id="statusFilter">
-                            <option value="">جميع الحالات</option>
-                            <option value="NEW">جديد</option>
-                            <option value="IN_REVIEW">قيد المراجعة</option>
-                            <option value="RESOLVED_SUPPORT">محلول - الدعم</option>
-                            <option value="ESCALATED">محول</option>
-                            <option value="RESOLVED_COORD">محلول - التنسيق</option>
-                            <option value="CLOSED">مغلق</option>
-                            <option value="REJECTED">مرفوض</option>
-                        </select>
-                        <button onclick="goBack()">← العودة</button>
-                    </div>
-                </header>
-                
-                <div id="complaintsListContent" class="complaints-grid"></div>
-            </div>
-        </div>
-
-        <!-- Complaint Detail Screen -->
-        <div id="complaintDetail" class="screen">
-            <div class="container">
-                <header class="screen-header">
-                    <h2>تفاصيل الشكوى</h2>
-                    <div class="header-actions">
-                        <button onclick="printComplaint()" title="طباعة">🖨️</button>
-                        <button onclick="goBack()">← العودة</button>
-                    </div>
-                </header>
-                
-                <div id="complaintDetailContent"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast notifications -->
-    <div id="toast" class="toast"></div>
-
-    <!-- Loading overlay -->
-    <div id="loadingOverlay" class="loading-overlay">
-        <div class="spinner"></div>
-    </div>
-
-    <script src="app.js"></script>
+  <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

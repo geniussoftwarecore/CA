@@ -4,7 +4,7 @@ expertMode = true
 
 [nix]
 channel = "stable-25_05"
-packages = ["wget", "curl", "unzip", "python3"]
+packages = ["wget", "curl", "unzip", "python3", "flutter"]
 
 [workflows]
 runButton = "Project"
@@ -16,15 +16,31 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Peregrine Complaints Web Server"
+args = "Flutter Web App"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Flutter Dev Server"
 
 [[workflows.workflow]]
-name = "Peregrine Complaints Web Server"
+name = "Flutter Web App"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd peregrine_offline_complaints && python3 -m http.server 5000 --bind 0.0.0.0 --directory build/web"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Flutter Dev Server"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd peregrine_offline_complaints && python3 -m http.server 5000 --bind 0.0.0.0 --directory web"
+args = "cd peregrine_offline_complaints && flutter run --web-port=5000 --web-hostname=0.0.0.0 --web-renderer=html"
 waitForPort = 5000
 
 [workflows.workflow.metadata]
@@ -34,10 +50,7 @@ outputType = "webview"
 localPort = 5000
 externalPort = 80
 
-[[ports]]
-localPort = 46857
-externalPort = 3000
-
 [deployment]
 deploymentTarget = "autoscale"
-run = ["python3", "-m", "http.server", "5000", "--bind", "0.0.0.0", "--directory", "peregrine_offline_complaints/web"]
+run = ["python3", "-m", "http.server", "5000", "--bind", "0.0.0.0", "--directory", "build/web"]
+build = ["flutter", "build", "web", "--release"]

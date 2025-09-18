@@ -1,5 +1,5 @@
 name: peregrine_offline_complaints
-description: An offline-first web complaints management app with Arabic RTL support
+description: "Offline-first complaints management system with Arabic RTL support"
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -8,26 +8,76 @@ environment:
   sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
-  # Core web dependencies
-  http: ^1.1.0
-  
-  # Local storage for web
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State Management
+  flutter_riverpod: ^2.4.9
+
+  # Navigation
+  go_router: ^12.1.3
+
+  # Database
+  drift: ^2.14.1
+  sqlite3_flutter_libs: ^0.5.15
+  path_provider: ^2.1.1
+  path: ^1.8.3
+
+  # JSON serialization
+  json_annotation: ^4.8.1
+
+  # Local storage
   shared_preferences: ^2.2.2
-  
-  # Date and utility libraries
-  intl: ^0.19.0
-  
-  # UUID generation
+
+  # File operations
+  file_picker: ^6.1.1
+  image_picker: ^1.0.4
+
+  # Internationalization
+  intl: ^0.20.2
+
+  # PDF generation and printing
+  pdf: ^3.10.7
+  printing: ^5.11.1
+
+  # UI
+  cupertino_icons: ^1.0.2
+
+  # Utilities
   uuid: ^4.2.1
-  
-  # Crypto for PIN hashing
   crypto: ^3.0.3
 
 dev_dependencies:
-  test: ^1.24.0
-  build_runner: ^2.4.7
-  webdev: ^3.0.9
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
 
-# Web configuration
+  # JSON code generation
+  json_serializable: ^6.7.1
+  build_runner: ^2.4.7
+
+  # Database code generation
+  drift_dev: ^2.14.1
+
 flutter:
-  uses-material-design: false
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/images/
+    - assets/fonts/
+    - assets/categories_ar.json
+
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo/Cairo-Regular.ttf
+        - asset: assets/fonts/Cairo/Cairo-Bold.ttf
+          weight: 700
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto/Roboto-Regular.ttf
+        - asset: assets/fonts/Roboto/Roboto-Bold.ttf
+          weight: 700
