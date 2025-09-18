@@ -42,6 +42,10 @@ externalPort = 3001
 localPort = 40929
 externalPort = 3000
 
+[[ports]]
+localPort = 42057
+externalPort = 3002
+
 [deployment]
 deploymentTarget = "autoscale"
 run = ["python3", "-m", "http.server", "5000", "--bind", "0.0.0.0", "--directory", "peregrine_offline_complaints/build/web"]
