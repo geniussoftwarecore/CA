@@ -49,4 +49,4 @@ externalPort = 3002
 [deployment]
 deploymentTarget = "autoscale"
 run = ["python3", "-m", "http.server", "5000", "--bind", "0.0.0.0", "--directory", "peregrine_offline_complaints/build/web"]
-build = ["bash", "-c", "cd peregrine_offline_complaints && flutter build web --release"]
+build = ["cd", "peregrine_offline_complaints", "&&", "flutter", "build", "web", "--release"]
