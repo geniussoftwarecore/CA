@@ -1,4 +1,4 @@
-modules = ["cpp-clang14", "java-graalvm22.3", "dart-3.8"]
+modules = ["cpp-clang14", "java-graalvm22.3"]
 [agent]
 expertMode = true
 
