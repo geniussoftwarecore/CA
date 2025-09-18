@@ -1,13 +1,16 @@
 # نظام شكاوى بيرقرين - Peregrine Complaints System
 
-## Overview
-A complete offline-first web complaints management system with full Arabic RTL support. This project was successfully imported from GitHub and configured to run in the Replit environment.
+## Overview  
+A comprehensive Flutter-based complaints management system with full Arabic RTL support and offline-first functionality. This project has been successfully imported from GitHub and configured to run in the Replit environment.
 
 ## Project Architecture
-- **Type**: Static web application (HTML/CSS/JavaScript)
-- **Framework**: Vanilla JavaScript with localStorage for offline-first functionality
-- **Language Support**: Arabic RTL interface with local Arabic fonts
-- **Data Storage**: Browser localStorage for complete offline functionality
+- **Type**: Flutter Web Application
+- **Framework**: Flutter 3.32.0 with Material Design 3
+- **State Management**: Riverpod for reactive state management  
+- **Navigation**: go_router for declarative routing
+- **Language Support**: Full Arabic RTL interface with Cairo and Roboto fonts
+- **Database**: Drift (SQLite) for local data storage
+- **Data Storage**: Local SQLite database with offline-first functionality
 
 ## Key Features
 - **Offline-first operation**: All data stored locally using localStorage
@@ -21,9 +24,10 @@ A complete offline-first web complaints management system with full Arabic RTL s
 - **Dark/Light theme**: Theme switching with persistent settings
 
 ## Technical Setup
-- **Web Server**: Python HTTP server on port 5000
-- **Files**: Located in `peregrine_offline_complaints/web/` directory
-- **Deployment**: Configured for autoscale deployment target
+- **Build System**: Flutter build web pipeline
+- **Web Server**: Python HTTP server on port 5000 serving built Flutter web assets
+- **Built Files**: Located in `peregrine_offline_complaints/build/web/` directory  
+- **Deployment**: Configured for autoscale deployment target with build and run commands
 - **Host Configuration**: Properly configured for Replit proxy environment
 
 ## Current Status
@@ -51,10 +55,12 @@ peregrine_offline_complaints/
 - **Coordination Committee PIN**: 5678
 
 ## Recent Changes
-- **September 18, 2025**: Successfully imported and configured for Replit
-- Added missing manifest.json file for PWA functionality
-- Configured proper static web server workflow
-- Set up deployment configuration for production
+- **September 18, 2025**: Successfully imported Flutter project and configured for Replit
+- Fixed Flutter version compatibility issues (CardTheme → CardThemeData)
+- Built Flutter web application successfully
+- Configured Flutter Web Server workflow on port 5000
+- Set up deployment configuration with build and run commands
+- Database tables temporarily commented out pending build_runner setup
 
 ## User Preferences
 - The application is designed for Arabic-speaking users
