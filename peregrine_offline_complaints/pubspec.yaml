@@ -81,3 +81,8 @@ flutter:
         - asset: assets/fonts/Roboto/Roboto-Regular.ttf
         - asset: assets/fonts/Roboto/Roboto-Bold.ttf
           weight: 700
+    - family: DefaultArabic
+      fonts:
+        - asset: assets/fonts/Cairo/Cairo-Regular.ttf
+        - asset: assets/fonts/Cairo/Cairo-Bold.ttf
+          weight: 700

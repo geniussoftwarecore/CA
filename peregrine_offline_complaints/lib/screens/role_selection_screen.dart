@@ -53,6 +53,7 @@ class RoleSelectionScreen extends StatelessWidget {
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
+                      fontFamily: 'Cairo',
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -62,6 +63,7 @@ class RoleSelectionScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.white70,
+                      fontFamily: 'Cairo',
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -147,6 +149,7 @@ class RoleSelectionScreen extends StatelessWidget {
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
+                            fontFamily: 'Cairo',
                           ),
                         ),
                         if (requiresPIN) ...[
@@ -165,6 +168,7 @@ class RoleSelectionScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey[600],
+                        fontFamily: 'Cairo',
                       ),
                     ),
                     if (requiresPIN)
@@ -174,6 +178,7 @@ class RoleSelectionScreen extends StatelessWidget {
                           fontSize: 12,
                           color: Colors.orange,
                           fontWeight: FontWeight.w500,
+                          fontFamily: 'Cairo',
                         ),
                       ),
                   ],

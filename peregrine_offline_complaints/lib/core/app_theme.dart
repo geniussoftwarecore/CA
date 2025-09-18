@@ -49,6 +49,9 @@ class AppTheme {
         ),
       ),
       fontFamily: 'Cairo',
+      textTheme: const TextTheme().apply(
+        fontFamily: 'Cairo',
+      ),
     );
   }
   
@@ -93,6 +96,9 @@ class AppTheme {
         ),
       ),
       fontFamily: 'Cairo',
+      textTheme: const TextTheme().apply(
+        fontFamily: 'Cairo',
+      ),
     );
   }
 }
