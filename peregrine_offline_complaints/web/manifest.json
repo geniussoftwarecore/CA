@@ -1,0 +1,17 @@
+{
+  "name": "نظام شكاوى بيرقرين",
+  "short_name": "شكاوى بيرقرين",
+  "description": "نظام إدارة الشكاوى المحلي بدون إنترنت مع دعم كامل للغة العربية",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1976d2",
+  "theme_color": "#1976d2",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3e%3ctext y='.9em' font-size='90'%3e📋%3c/text%3e%3c/svg%3e",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
