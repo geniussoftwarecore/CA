@@ -1,6 +1,9 @@
-import 'package:drift/drift.dart';
-import 'database.dart';
+// Temporarily commented out for build
+// import 'package:drift/drift.dart';
+// import 'database.dart';
 
+// Temporarily commented out for build
+/*
 @DataClassName('Complaint')
 class Complaints extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -98,3 +101,4 @@ class Users extends Table {
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get lastLoginAt => dateTime().nullable()();
 }
+*/
