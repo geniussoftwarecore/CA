@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../l10n/app_localizations.dart';
+
 class SupportHomeScreen extends StatelessWidget {
   const SupportHomeScreen({super.key});
 
@@ -10,7 +12,7 @@ class SupportHomeScreen extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('لوحة لجنة الدعم'),
+          title: Text(S.of(context)!.role_support),
           actions: [
             IconButton(
               icon: const Icon(Icons.logout),
@@ -27,7 +29,7 @@ class SupportHomeScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _buildStatCard(
-                      title: 'الواردة اليوم',
+                      title: S.of(context)!.today_received,
                       value: '12',
                       color: const Color(0xFF009639),
                       icon: Icons.inbox,
@@ -36,7 +38,7 @@ class SupportHomeScreen extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: _buildStatCard(
-                      title: 'المحلولة',
+                      title: S.of(context)!.resolved,
                       value: '8',
                       color: const Color(0xFF002855),
                       icon: Icons.check_circle,
@@ -45,7 +47,7 @@ class SupportHomeScreen extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: _buildStatCard(
-                      title: 'المحولة',
+                      title: S.of(context)!.transferred,
                       value: '3',
                       color: const Color(0xFFF4B400),
                       icon: Icons.forward,
@@ -64,8 +66,8 @@ class SupportHomeScreen extends StatelessWidget {
                   children: [
                     _buildActionCard(
                       context,
-                      title: 'صندوق الوارد',
-                      subtitle: 'شكاوى جديدة وقيد المراجعة',
+                      title: S.of(context)!.support_inbox,
+                      subtitle: S.of(context)!.new_and_reviewing,
                       icon: Icons.inbox,
                       badge: '12',
                       color: const Color(0xFF009639),

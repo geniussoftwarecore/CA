@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../l10n/app_localizations.dart';
+
 class PinEntryScreen extends StatefulWidget {
   final String role;
   
@@ -24,7 +26,7 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('دخول ${_getRoleTitle()}'),
+          title: Text(S.of(context)!.pin_title),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => context.go('/'),
@@ -42,7 +44,7 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
               ),
               const SizedBox(height: 32),
               Text(
-                'مرحباً بك في ${_getRoleTitle()}',
+                'مرحباً بك في ${_getRoleTitle(context)}',
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -50,9 +52,9 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
-              const Text(
-                'يرجى إدخال رمز PIN للمتابعة',
-                style: TextStyle(
+              Text(
+                S.of(context)!.pin_hint,
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.grey,
                 ),
@@ -94,9 +96,9 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
                   onPressed: _isLoading ? null : _verifyPin,
                   child: _isLoading
                       ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text(
-                          'تسجيل الدخول',
-                          style: TextStyle(fontSize: 18),
+                      : Text(
+                          S.of(context)!.login,
+                          style: const TextStyle(fontSize: 18),
                         ),
                 ),
               ),
@@ -107,12 +109,12 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
     );
   }
 
-  String _getRoleTitle() {
+  String _getRoleTitle(BuildContext context) {
     switch (widget.role) {
       case 'support':
-        return 'لجنة الدعم';
+        return S.of(context)!.role_support;
       case 'coordination':
-        return 'لجنة التنسيق العليا';
+        return S.of(context)!.role_coord;
       default:
         return 'Unknown';
     }
@@ -134,7 +136,7 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
     
     if (pin.isEmpty) {
       setState(() {
-        _errorMessage = 'يرجى إدخال رمز PIN';
+        _errorMessage = S.of(context)!.validation_required;
       });
       return;
     }
@@ -163,7 +165,7 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
       context.go('/${widget.role}');
     } else {
       setState(() {
-        _errorMessage = 'رمز PIN غير صحيح';
+        _errorMessage = S.of(context)!.pin_error;
       });
       _pinController.clear();
     }

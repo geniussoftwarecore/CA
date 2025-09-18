@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../l10n/app_localizations.dart';
+
 class ComplaintFormScreen extends StatefulWidget {
   const ComplaintFormScreen({super.key});
 
@@ -19,7 +21,7 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('تقديم شكوى جديدة'),
+          title: Text(S.of(context)!.submit_complaint),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => context.go('/client'),
@@ -104,7 +106,7 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen> {
                             curve: Curves.ease,
                           );
                         },
-                        child: const Text('السابق'),
+                        child: Text(S.of(context)!.previous),
                       ),
                     ),
                   if (_currentStep > 0) const SizedBox(width: 16),
@@ -121,7 +123,7 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen> {
                         }
                       },
                       child: Text(
-                        _currentStep < _totalSteps - 1 ? 'التالي' : 'تقديم الشكوى',
+                        _currentStep < _totalSteps - 1 ? S.of(context)!.next : S.of(context)!.submit_complaint,
                       ),
                     ),
                   ),

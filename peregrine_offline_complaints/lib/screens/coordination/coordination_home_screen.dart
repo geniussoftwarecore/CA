@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../l10n/app_localizations.dart';
+
 class CoordinationHomeScreen extends StatelessWidget {
   const CoordinationHomeScreen({super.key});
 
@@ -10,7 +12,7 @@ class CoordinationHomeScreen extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('لوحة لجنة التنسيق العليا'),
+          title: Text(S.of(context)!.role_coord),
           actions: [
             IconButton(
               icon: const Icon(Icons.logout),
@@ -29,8 +31,8 @@ class CoordinationHomeScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'الملخص الشامل',
+                      Text(
+                        S.of(context)!.comprehensive_summary,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -41,21 +43,21 @@ class CoordinationHomeScreen extends StatelessWidget {
                         children: [
                           Expanded(
                             child: _buildSummaryItem(
-                              'إجمالي الشكاوى',
+                              S.of(context)!.total_complaints,
                               '147',
                               const Color(0xFF002855),
                             ),
                           ),
                           Expanded(
                             child: _buildSummaryItem(
-                              'معدل الحل',
+                              S.of(context)!.resolution_rate,
                               '89%',
                               const Color(0xFF009639),
                             ),
                           ),
                           Expanded(
                             child: _buildSummaryItem(
-                              'متوسط وقت الحل',
+                              S.of(context)!.avg_resolution_time,
                               '3.2 يوم',
                               const Color(0xFFF4B400),
                             ),

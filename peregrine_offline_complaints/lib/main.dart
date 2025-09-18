@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'l10n/app_localizations.dart';
 import 'core/app_theme.dart';
 import 'core/router.dart';
 import 'providers/database_provider.dart';
@@ -25,21 +26,14 @@ class PeregrineComplaintsApp extends ConsumerWidget {
     final router = ref.watch(routerProvider);
     
     return MaterialApp.router(
-      title: 'نظام شكاوى بيرقرين',
+      onGenerateTitle: (context) => S.of(context)!.appTitle,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
       routerConfig: router,
       locale: const Locale('ar', 'SA'),
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('ar', 'SA'),
-        Locale('en', 'US'),
-      ],
+      localizationsDelegates: S.localizationsDelegates,
+      supportedLocales: S.supportedLocales,
       debugShowCheckedModeBanner: false,
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../l10n/app_localizations.dart';
+
 class RoleSelectionScreen extends StatelessWidget {
   const RoleSelectionScreen({super.key});
 
@@ -47,9 +49,9 @@ class RoleSelectionScreen extends StatelessWidget {
                   const SizedBox(height: 32),
                   
                   // Title
-                  const Text(
-                    'نظام شكاوى بيرقرين',
-                    style: TextStyle(
+                  Text(
+                    S.of(context)!.appTitle,
+                    style: const TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -58,9 +60,9 @@ class RoleSelectionScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'نظام إدارة الشكاوى المحلي',
-                    style: TextStyle(
+                  Text(
+                    S.of(context)!.system_subtitle,
+                    style: const TextStyle(
                       fontSize: 18,
                       color: Colors.white70,
                       fontFamily: 'Cairo',
@@ -72,16 +74,16 @@ class RoleSelectionScreen extends StatelessWidget {
                   // Role Cards
                   _buildRoleCard(
                     context,
-                    title: 'عميل',
-                    subtitle: 'تقديم شكوى جديدة أو متابعة الشكاوى المقدمة',
+                    title: S.of(context)!.role_client,
+                    subtitle: S.of(context)!.welcome_subtitle,
                     icon: Icons.person,
                     onTap: () => context.go('/client'),
                   ),
                   const SizedBox(height: 16),
                   _buildRoleCard(
                     context,
-                    title: 'لجنة الدعم',
-                    subtitle: 'مراجعة ومعالجة الشكاوى الواردة',
+                    title: S.of(context)!.role_support,
+                    subtitle: S.of(context)!.new_and_reviewing,
                     icon: Icons.support_agent,
                     requiresPIN: true,
                     onTap: () => context.go('/pin-entry/support'),
@@ -89,8 +91,8 @@ class RoleSelectionScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   _buildRoleCard(
                     context,
-                    title: 'لجنة التنسيق العليا',
-                    subtitle: 'المراجعة النهائية والقرارات الإدارية',
+                    title: S.of(context)!.role_coord,
+                    subtitle: S.of(context)!.comprehensive_summary,
                     icon: Icons.admin_panel_settings,
                     requiresPIN: true,
                     onTap: () => context.go('/pin-entry/coordination'),
@@ -172,9 +174,9 @@ class RoleSelectionScreen extends StatelessWidget {
                       ),
                     ),
                     if (requiresPIN)
-                      const Text(
-                        'يتطلب رمز PIN',
-                        style: TextStyle(
+                      Text(
+                        S.of(context)!.pin_required,
+                        style: const TextStyle(
                           fontSize: 12,
                           color: Colors.orange,
                           fontWeight: FontWeight.w500,

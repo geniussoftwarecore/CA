@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../l10n/app_localizations.dart';
+
 class ClientHomeScreen extends StatelessWidget {
   const ClientHomeScreen({super.key});
 
@@ -10,7 +12,7 @@ class ClientHomeScreen extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('لوحة العميل'),
+          title: Text(S.of(context)!.nav_home),
           actions: [
             IconButton(
               icon: const Icon(Icons.logout),
@@ -39,15 +41,15 @@ class ClientHomeScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'مرحباً بك',
-                              style: TextStyle(
+                            Text(
+                              S.of(context)!.welcome_message,
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
-                              'يمكنك تقديم شكوى جديدة أو متابعة شكاويك السابقة',
+                              S.of(context)!.welcome_subtitle,
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey[600],
@@ -71,16 +73,16 @@ class ClientHomeScreen extends StatelessWidget {
                   children: [
                     _buildActionCard(
                       context,
-                      title: 'شكوى جديدة',
-                      subtitle: 'تقديم شكوى جديدة',
+                      title: S.of(context)!.new_complaint,
+                      subtitle: S.of(context)!.new_complaint_subtitle,
                       icon: Icons.add_circle,
                       color: const Color(0xFF009639),
                       onTap: () => context.go('/complaint-form'),
                     ),
                     _buildActionCard(
                       context,
-                      title: 'شكاويي',
-                      subtitle: 'عرض الشكاوى المقدمة',
+                      title: S.of(context)!.nav_my_complaints,
+                      subtitle: S.of(context)!.my_complaints_subtitle,
                       icon: Icons.list_alt,
                       color: const Color(0xFF002855),
                       onTap: () {
@@ -89,8 +91,8 @@ class ClientHomeScreen extends StatelessWidget {
                     ),
                     _buildActionCard(
                       context,
-                      title: 'تصدير/استيراد',
-                      subtitle: 'إدارة البيانات',
+                      title: S.of(context)!.export_import,
+                      subtitle: S.of(context)!.data_management,
                       icon: Icons.import_export,
                       color: const Color(0xFFF4B400),
                       onTap: () {
@@ -99,8 +101,8 @@ class ClientHomeScreen extends StatelessWidget {
                     ),
                     _buildActionCard(
                       context,
-                      title: 'الإعدادات',
-                      subtitle: 'إعدادات التطبيق',
+                      title: S.of(context)!.nav_settings,
+                      subtitle: S.of(context)!.app_settings,
                       icon: Icons.settings,
                       color: Colors.grey,
                       onTap: () {

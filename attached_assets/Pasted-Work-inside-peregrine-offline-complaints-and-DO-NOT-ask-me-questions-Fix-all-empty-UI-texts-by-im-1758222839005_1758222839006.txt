@@ -1,0 +1,121 @@
+Work inside ./peregrine_offline_complaints and DO NOT ask me questions. Fix all empty UI texts by implementing full Arabic localization and wiring strings across the app.
+
+L10N SETUP
+- Add intl localization: create l10n/ directory with:
+  * l10n.yaml configured for AR (default) and EN (optional).
+  * pubspec: ensure flutter_localizations is added and AR is enabled.
+- Generate localization delegates and S class; set Arabic (ar) as default; app must run fully in Arabic RTL.
+
+ARABIC STRINGS (create l10n/app_ar.arb with at least these keys; you may add more as needed):
+{
+  "appTitle": "شكاوى بيريجراين",
+  "role_client": "عميل",
+  "role_support": "لجنة الدعم الفني",
+  "role_coord": "لجنة التنسيق الأعلى",
+
+  "nav_home": "الرئيسية",
+  "nav_my_complaints": "شكاواي",
+  "nav_daily_report": "تقرير يومي",
+  "nav_settings": "الإعدادات",
+
+  "pin_title": "إدخال رمز PIN",
+  "pin_hint": "أدخل الرمز للوصول للوضع الإداري",
+  "pin_error": "رمز غير صحيح",
+
+  "form_step1_title": "بيانات مقدم الشكوى",
+  "first_name": "الاسم الأول",
+  "middle_name": "الاسم الثاني",
+  "last_name": "اللقب",
+  "address": "العنوان",
+  "phone": "الهاتف",
+  "alt_phone": "هاتف بديل",
+  "whatsapp": "واتساب",
+  "telegram": "تيليجرام",
+  "email": "البريد الإلكتروني",
+
+  "form_step2_title": "التقديم بالنيابة",
+  "on_behalf": "التقديم بالنيابة",
+  "on_behalf_self": "عن نفسي",
+  "on_behalf_org": "عن جهة",
+  "on_behalf_other": "عن شخص آخر",
+  "behalf_full_name": "الاسم الكامل للنيابة",
+  "behalf_relation": "صلة القرابة/العلاقة",
+
+  "form_step3_title": "التصنيف والجهة والتواريخ",
+  "category": "التصنيف",
+  "authority": "الجهة",
+  "incident_date": "تاريخ الواقعة",
+  "awareness_date": "تاريخ العلم",
+
+  "form_step4_title": "تفاصيل الشكوى",
+  "summary": "تفاصيل الشكوى",
+  "authority_offer": "هل قُدم عرض/حل من الجهة؟",
+  "desired_resolution": "المطلوب لوضع الأمور في نصابها",
+  "previous_complaint": "هل سبق تقديم شكوى؟",
+  "legal_action_exists": "هل توجد قضية/إجراء قانوني؟",
+
+  "form_step5_title": "المرفقات",
+  "add_attachment": "إضافة مرفق",
+  "submit_complaint": "إرسال الشكوى",
+  "save_draft": "حفظ مسودة",
+
+  "validation_required": "هذا الحقل مطلوب",
+  "validation_invalid_email": "بريد إلكتروني غير صالح",
+  "validation_date": "تاريخ غير صالح",
+
+  "status_new": "جديدة",
+  "status_in_review": "قيد المراجعة",
+  "status_resolved_support": "تم الحل (الدعم)",
+  "status_escalated": "محوّلة للتنسيق الأعلى",
+  "status_resolved_coord": "تم الحل (التنسيق الأعلى)",
+  "status_closed": "مغلقة",
+  "status_rejected": "مرفوضة",
+
+  "support_inbox": "الوارد",
+  "assigned_to_me": "المُسندة إليّ",
+  "resolved_by_support": "تم حلها (الدعم)",
+  "escalated_list": "المحوّلة",
+
+  "action_assign_to_me": "إسناد لنفسي",
+  "action_add_note": "إضافة ملاحظة",
+  "action_resolve": "تأشير تم الحل",
+  "action_escalate": "تحويل للتنسيق الأعلى",
+  "action_close": "إغلاق",
+  "action_reject": "رفض",
+
+  "possible_duplicate": "شكوى محتمل تكرارها",
+  "duplicate_found": "تم رصد شكوى مشابهة في نفس التصنيف/الجهة",
+
+  "empty_state_no_complaints": "لا توجد شكاوى بعد",
+  "empty_state_try_create": "ابدأ بإنشاء شكوى جديدة من الزر أدناه",
+
+  "report_daily_title": "التقرير اليومي",
+  "report_generate_pdf": "توليد PDF",
+  "report_saved": "تم حفظ التقرير",
+  "report_share": "مشاركة التقرير",
+
+  "export_json": "تصدير JSON",
+  "import_json": "استيراد JSON",
+  "export_done": "تم التصدير بنجاح",
+  "import_done": "تم الاستيراد بنجاح"
+}
+
+WIRED UI
+- Replace all hard-coded/empty Text widgets with localized strings (S.of(context).key).
+- Give every screen an AppBar title using the keys above.
+- Ensure buttons, validators, empty states, and snackbars use these strings.
+
+PDF
+- Make the Arabic PDF report use the same localized strings and proper RTL paragraph direction.
+
+QUALITY GUARD
+- Add a unit test that fails if any Text("") or Text('   ') exists.
+- Optionally add a lint or a small script to scan for empty labels.
+- Run: dart run build_runner build --delete-conflicting-outputs
+- Finally run: flutter pub get && flutter analyze
+
+BRANDING
+- Confirm Cairo font is bundled and used; no GoogleFonts network calls.
+- Fix logo path if mismatch (assets/images/logo.jpg vs assets/logo.png) and use it in Splash/AppBar/Drawer.
+
+Print a short summary of files changed, and a RUN GUIDE. Do NOT ask me questions—just execute.
