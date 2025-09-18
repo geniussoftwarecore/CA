@@ -40,5 +40,5 @@ externalPort = 3000
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["python3", "-m", "http.server", "5000", "--bind", "0.0.0.0", "--directory", "build/web"]
-build = ["flutter", "build", "web", "--release"]
+run = ["python3", "-m", "http.server", "5000", "--bind", "0.0.0.0", "--directory", "peregrine_offline_complaints/build/web"]
+build = ["flutter", "build", "web", "--base-href", "/"]
